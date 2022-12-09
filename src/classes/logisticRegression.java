@@ -13,12 +13,8 @@ public class logisticRegression {
   // weights
   double[] wj = { 0, 0, 0 };
 
-  // predictions
-  double x1p = 4;
-  double x2p = 3.5;
-
   public logisticRegression() {
-    while (iterations > 0) {
+    while (checkPredictions() == 0) {
       iterations = iterations - 1;
       double aux1 = 0, aux2 = 0, aux3 = 0;
       for (int i = 0; i < yi.length; i++) {
@@ -30,20 +26,34 @@ public class logisticRegression {
       wj[1] = wj[1] - learningRate * aux2;
       wj[2] = wj[2] - learningRate * aux3;
       System.out.println("Vueltas restantes: " + iterations);
-      System.out.println("{" + wj[0] + ", " + wj[1] + ", " + wj[2] + "}");
+      // System.out.println("{" + wj[0] + ", " + wj[1] + ", " + wj[2] + "}");
     }
 
-    prediction();
+    System.out.println("Clasificacion: ");
+    if (prediction(4, 3.5) == 1)
+      System.out.println("Aceptado");
+    else
+      System.out.println("Rechazado");
   }
 
-  public void prediction() {
+  public int prediction(double x1p, double x2p) {
     double result = 1 / (1 + Math.pow(Math.E, -(wj[0] + (wj[1] * x1p) + (wj[2] * x2p))));
     System.out.println("Prediction {" + x1p + ", " + x2p + "} = " + result);
-    System.out.println("Clasificacion: ");
     if (result > 0.5)
-      System.out.println("SI");
+      return 1;
     else
-      System.out.println("NO");
+      return 0;
+  }
+
+  public int checkPredictions() {
+    int resultx1 = prediction(1, 1);
+    int resultx2 = prediction(4, 2);
+    int resultx3 = prediction(2, 4);
+    if (resultx1 == yi[0] && resultx2 == yi[1] && resultx3 == yi[2]) {
+      System.out.println("{" + wj[0] + ", " + wj[1] + ", " + wj[2] + "}");
+      return 1;
+    } else
+      return 0;
   }
 
 }
